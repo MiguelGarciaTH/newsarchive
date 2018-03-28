@@ -5,6 +5,11 @@ from bs4 import BeautifulSoup
 from Article import Article
 
 
+removal_list = ["PUB", 'Continuar a ler\n',
+                "Subscreva gratuitamente as newsletters e receba o melhor da actualidade e os trabalhos mais profundos do Público. Subscrever ×",
+                'Ler mais\n',
+                "O melhor do Público no email"]
+
 
 def get_url(url):
     return requests.post(url)
@@ -20,22 +25,21 @@ def get_html(url):
     return BeautifulSoup(requests.get(url).text, "html.parser")
 
 
-def cleanMe(html):
-    soup = html
+def clean_text(text):
+    for word in removal_list:
+        return text.replace(word, "")
+
+
+def clean_html(soup):
     for script in soup(["script", "style"]): # remove all javascript and stylesheet code
         script.extract()
-    # get text
-    text = soup.get_text()
-    # break into lines and remove leading and trailing space on each
-    lines = (line.strip() for line in text.splitlines())
-    # break multi-headlines into a line each
+    html = soup.get_text()
+    lines = (line.strip() for line in html.splitlines())
     chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-    # drop blank lines
-    text = '\n'.join(chunk for chunk in chunks if chunk)
-    return text
+    return '\n'.join(chunk for chunk in chunks if chunk)
 
 
-jsonToPython = get_articles('publico.pt', '1')
+jsonToPython = get_articles('publico.pt', '10')
 list_url = []
 print(len(jsonToPython['response_items']))
 for i in range(len(jsonToPython['response_items'])):
@@ -57,10 +61,11 @@ for elem in list_url:
     author = article.find('meta', attrs={'name': 'author'})
     date = article.find('time', attrs={'class': 'dateline'})
     text = article.find('div', attrs={'class': 'story__body'})
-    text = cleanMe(text)
+    text = clean_text(clean_html(text))
     S = Article(author["content"], text, elem[1], date["datetime"], elem[0])
     article_list.update({elem[1]:S})
 
 for elem in article_list.values():
     print(elem)
+    print('\n\n\n')
 
