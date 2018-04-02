@@ -11,6 +11,8 @@ for i in range(0,1):
     for div in productDivs:
         print(main_url+div.find('a')['href'])
         article = BeautifulSoup(requests.get(main_url+div.find('a')['href']).text, "html.parser")
-        text = article.findAll('div', attrs={'class': 'field field-name-body'})
-        for p in text:
-            print(str(p.find('p').getText()))
+        text = article.find('div', attrs={'class': 'field field-name-body'}).findAll('p')
+        article_text = ''
+        for element in text:
+            article_text += '\n' + ''.join(element.findAll(text=True))
+        print(article_text)
