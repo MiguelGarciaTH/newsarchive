@@ -39,7 +39,7 @@ def clean_html(soup):
     return '\n'.join(chunk for chunk in chunks if chunk)
 
 
-jsonToPython = get_articles('publico.pt', '10')
+jsonToPython = get_articles('publico.pt', '2')
 list_url = []
 print(len(jsonToPython['response_items']))
 for i in range(len(jsonToPython['response_items'])):
