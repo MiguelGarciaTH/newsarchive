@@ -16,4 +16,4 @@ for i in range(0,1):
         index+=1
         for element in text:
             article_text += ''.join(element.findAll(text=True))
-        print(str(index)+", '"+ article_text.replace('"','')+ "', "+ "E, " +main_url+div.find('a')['href']+'\n')
+        print(str(index)+", '"+ article_text.replace('"','')+ "', "+ "E, '" +main_url+div.find('a')['href']+"'\n")
