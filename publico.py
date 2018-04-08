@@ -70,20 +70,24 @@ for i in range(len(jsonToPython['response_items'])):
         continue
 
 article_list = {}
+index = 0
+file = open("publico.txt","w")
 for elem in list_url:
     article = get_html(elem[1])
     author = article.find('meta', attrs={'name': 'author'})
     date = article.find('time', attrs={'class': 'dateline'})
     text = article.find('div', attrs={'class': 'story__body'})
-    text = clean_text(clean_html(text))
     try:
+        text = clean_text(clean_html(text))
         S = Article(author["content"], text, elem[1], date["datetime"], elem[0])
     except (TypeError):
         continue
-    article_list.update({elem[1]:S})
+    article_list.update({elem[1].rsplit('/', 1)[1]:S})
 
-index=0
 for elem in article_list.values():
-    print(str(index)+", '" + elem.get_text()+"', ?, '"+elem.get_url()+"', '"+elem.get_author()+"'\n")
-    index+=1
+    file.write(str(index)+", '" +  str(elem.get_text())+"', ?, '"+ elem.get_url()+"', '"+ elem.get_author()+"'\n")
+    index += 1
+file.close()
+
+
 

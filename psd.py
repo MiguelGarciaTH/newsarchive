@@ -1,8 +1,9 @@
-from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
+from WekaFile import WekaFile
 
-
+weka = WekaFile("psd", "psd")
+weka.write_template()
 url="http://www.psd.pt/noticias/"
 index=0
 for i in range(1,697):
@@ -15,4 +16,7 @@ for i in range(1,697):
         index+=1
         for element in text:
             article_text += ''.join(element.findAll(text=True))
-        print(str(index)+", '"+ article_text.replace('“','').replace('”','')+ "', "+ "D, '" +div.find('a')['href']+"'\n"")
+        #print(str(index)+", '"+ article_text.replace('“','').replace('”','')+ "', "+ "D, '" +div.find('a')['href']+"'\n"")
+        weka.write(index, article_text.replace('“','').replace('”',''), "D")
+
+weka.close()
