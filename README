@@ -1,1 +1,2 @@
-This is a test
+#Descritpion
+This software collects news articles from newspapers online pages. In particular, it collects opinion articles about politics and economy. These articles are tagged as left/rigth-wind according to their author's known political "preference". Then, these dataset can be used by machine learning tools to classify other articles - also collected yet not tagged.
